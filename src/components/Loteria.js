@@ -1,4 +1,4 @@
-import React ,{Component} from 'react';
+import React ,{useState,useEffect} from 'react';
 
 /*
 Primero generemos un array al crear el componente
@@ -8,82 +8,53 @@ para el caso de reiniciar la loteria, se podria simplemente limpiar todo
 y que dispare alguna accion para generar otro array.
 
 */
+const RifaRenovada = () =>  {
+    let [loteria,setLoteria] = useState([]);
+    let [i, setI] = useState(0);
+    let [resultados, setResultados] = useState([]);
 
-class Rifa extends Component{
-    constructor(props){
-        super(props);
+    useEffect( ()=>{
+        const baloto = setInterval(Sorteo,10);
 
-        this.state={
-            loteria: [],
-            i: 0,
-            resultados: []
+        function stopBaloto(){
+            clearInterval(baloto)
         }
 
-        this.handleButton = this.handleButton.bind(this)
-        this.generarIndexe = this.generarIndexe.bind(this)
-    }
+        setTimeout(stopBaloto,1000)
 
-    handleButton(){
+    },[])
+
+    function Sorteo(){
         const n = 10;
         const arr = new Array(n);
+
         for (let i = 0; i < n; i++) {
             arr[i] = i + 1;
         }
-
-        //Aqui ordeno el array
+        
         arr.sort(() => Math.random() > 0.5 ? 1 : -1);
         const rifa = arr.slice(0, 10);
-        //Imprimo en consola para verificar
-        this.setState({
-            loteria: rifa,
-            i: 0,
-            resultados: []
-        })
+
+        setLoteria(rifa)
+        setI(i = 0);
+        setResultados([]);
     }
 
-    componentDidMount(){
-        const n = 10;
-        const arr = new Array(n);
-        for (let i = 0; i < n; i++) {
-            arr[i] = i + 1;
-        }
-
-        //Aqui ordeno el array
-        arr.sort(() => Math.random() > 0.5 ? 1 : -1);
-        const rifa = arr.slice(0, 10);
-        //Imprimo en consola para verificar
-        this.setState({
-            loteria: rifa,
-            i: 0
-        })
+    function nextNumber(){
+        setI(i + 1);
+        setResultados(resultados+loteria[i] +'-')
     }
 
-    generarIndexe(){
-        this.setState({
-            i: this.state.i + 1,
-            resultados: [...this.state.resultados,this.state.loteria[this.state.i]]
-        })
-        if(this.state.i === 11){
-            this.setState({
-                i: 11  
-            })
-        }
-    }
-    
-    render(){
-        return(
-            <div> 
-                <h1>{ this.state.i === 10 ? `El Numero ganador es ${this.state.loteria[9]}` : " "}</h1>
-                <h1>{ this.state.i === 11 ? "Gracias por Jugar. Reinicie el Baloto": " "}</h1>
-                <h1>{this.state.loteria[this.state.i]}</h1>
-                <button onClick={this.generarIndexe} className="btn waves-effect waves-light">Siguiente numero</button>
-                <button onClick={this.handleButton} className="btn waves-effect waves-light">Reiniciar</button>
-                <h4>Los numeros jugados son :</h4>
-                <h4>-{this.state.resultados}-</h4>
-            </div>
-        )
-    }
+    return(
+        <div>
+
+            <h1>{i === 10 ? `Gano el numero "${loteria[9]}"`: loteria[i]}</h1><br/>
+            <button onClick={nextNumber} disabled={i === 10} className="btn waves-effect waves-light" >Siguiente Numero</button>
+            <button onClick={Sorteo} className="btn waves-effect waves-light">Reiniciar</button> <br/>
+            <h6>Numeros Jugados en esta ronda</h6><br/>
+            <h2>{resultados}</h2>
+        </div>
+    ) 
 }
 
-
-export default Rifa;
+export default RifaRenovada;
