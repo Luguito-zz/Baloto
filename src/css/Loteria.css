@@ -1,0 +1,32 @@
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.w-number{
+    width: 130px;
+    height: 150px;
+}
+
+.b-s-number{
+    border-radius: 30px;
+    border: black solid 1px;
+    box-shadow: 0px 3px 10px 1px;
+}
+
+.m-top{
+    margin-top: 65px;
+}
+
+.m-boton{
+    margin-top:40px;
+}
+
+.w-boton{
+    width: 150px;
+}
+
+.m-bottom{
+    margin-bottom: 40px;
+}
